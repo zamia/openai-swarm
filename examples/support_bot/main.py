@@ -8,7 +8,7 @@ from swarm.repl import run_demo_loop
 
 # Initialize connections
 client = OpenAI()
-qdrant = qdrant_client.QdrantClient(host="localhost")
+qdrant = qdrant_client.QdrantClient(host="127.0.0.1", port=6335)
 
 # Set embedding model
 EMBEDDING_MODEL = "text-embedding-3-large"
@@ -83,13 +83,15 @@ user_interface_agent = Agent(
     name="User Interface Agent",
     instructions="You are a user interface agent that handles all interactions with the user. Call this agent for general questions and when no other agent is correct for the user query.",
     functions=[transfer_to_help_center],
+    model="claude-3-5-sonnet-20241022",
 )
 
 help_center_agent = Agent(
     name="Help Center Agent",
     instructions="You are an OpenAI help center agent who deals with questions about OpenAI products, such as GPT models, DALL-E, Whisper, etc.",
     functions=[query_docs, submit_ticket, send_email],
+    model="claude-3-5-sonnet-20241022",
 )
 
 if __name__ == "__main__":
-    run_demo_loop(user_interface_agent)
+    run_demo_loop(user_interface_agent, debug=True)
